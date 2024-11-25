@@ -47,7 +47,7 @@ tgenv: ## change terragrunt version to use 0.69.1 ## tfenv
 
 sso: ## login to aws via aws sso ## sso
 	@echo "=== input as follows ==="
-	@echo "SSO session name:e-dash-cosmos-{dev,stg,prod}"
+	@echo "SSO session name:e-playground-kohei"
 	@echo "SSO URL:https://d-956742f338.awsapps.com/start"
 	@echo "SSO region:ap-northeast-1"
 	@echo "========================"
