@@ -29,6 +29,23 @@ else
 	cd $(WORK_DIR)/$(m) && AWS_PROFILE=$(PROFILE) terragrunt apply
 endif
 
+destroy: prepare ## execute terragrunt destroy ## destroy e={environment}
+ifeq "$(e)" "dev"
+	$(eval PROFILE := ${DEV_PROFILE})
+	$(eval WORK_DIR := ${DEV_DIR})
+else ifeq "$(e)" "stg"
+	$(eval PROFILE := ${STG_PROFILE})
+	$(eval WORK_DIR := ${STG_DIR})
+	$(eval USE_AWS_VAULT := true)
+else ifeq "$(e)" "prod"
+	$(eval PROFILE:= ${PROD_PROFILE})
+	$(eval WORK_DIR := ${PROD_DIR})
+else
+	$(eval PROFILE := ${DEV_PROFILE})
+	$(eval WORK_DIR := ${DEV_DIR})
+endif
+	cd $(WORK_DIR) && AWS_PROFILE=$(PROFILE) terragrunt run-all destroy
+
 prepare:
 	make fmt
 	make tfenv
@@ -46,10 +63,4 @@ tgenv: ## change terragrunt version to use 0.69.1 ## tfenv
 
 
 sso: ## login to aws via aws sso ## sso
-	@echo "=== input as follows ==="
-	@echo "SSO session name:e-dash-cosmos-{dev,stg,prod}"
-	@echo "SSO URL:https://d-956742f338.awsapps.com/start"
-	@echo "SSO region:ap-northeast-1"
-	@echo "========================"
-	@echo ""
 	aws configure sso
