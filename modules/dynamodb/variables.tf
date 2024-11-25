@@ -1,4 +1,7 @@
 variable "variables" {}
+variable "s3_bucket_name" {
+  default = "not_set"
+}
 
 locals {
   variables = yamldecode(var.variables)
